@@ -1,19 +1,25 @@
 """
 Vector search service for finding similar historical incidents.
-Uses sentence-transformers for embedding and cosine similarity for search.
+Uses OpenAI embeddings and cosine similarity for search.
 Falls back to keyword matching if embeddings are unavailable.
 """
+import os
 import re
 import math
 from typing import List, Dict, Optional
 
+from openai import OpenAI
+
+_client = None
+HAS_EMBEDDINGS = False
+
 try:
-    from sentence_transformers import SentenceTransformer
-    _model = SentenceTransformer("all-MiniLM-L6-v2")
-    HAS_EMBEDDINGS = True
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key:
+        _client = OpenAI(api_key=api_key)
+        HAS_EMBEDDINGS = True
 except Exception:
-    _model = None
-    HAS_EMBEDDINGS = False
+    pass
 
 # In-memory cache of historical incident embeddings
 _incident_cache: List[Dict] = []
@@ -30,9 +36,13 @@ def _cosine_similarity(a: List[float], b: List[float]) -> float:
 
 
 def compute_embedding(text: str) -> Optional[List[float]]:
-    if not HAS_EMBEDDINGS or _model is None:
+    if not HAS_EMBEDDINGS or _client is None:
         return None
-    return _model.encode(text).tolist()
+    try:
+        response = _client.embeddings.create(input=text, model="text-embedding-3-small")
+        return response.data[0].embedding
+    except Exception:
+        return None
 
 
 def index_incident(incident: Dict):
