@@ -28,7 +28,7 @@ app = FastAPI(
 
 import os
 
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000,http://localhost").split(",")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000,http://localhost,https://dynamic-blancmange-fc1857.netlify.app").split(",")
 
 app.add_middleware(
     CORSMiddleware,
