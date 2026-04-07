@@ -122,6 +122,12 @@ def _fallback_root_cause(ticket_text: str, log_errors: list[str] = None) -> dict
         "Authentication/Authorization failure": ["auth.*fail", "401", "403", "token.*expired", "permission denied"],
         "High CPU utilization": ["high cpu", "cpu.*100", "cpu.*spike"],
         "Configuration error": ["config.*error", "missing.*config", "invalid.*config", "env.*variable"],
+        "React application setup required": ["react.*app", "need.*react", "react.*project", "create.*react", "frontend.*app", "front.?end.*develop"],
+        "Node.js application issue": ["node.*app", "npm.*error", "npm.*install.*fail", "node.*crash", "express.*error"],
+        "Python application issue": ["python.*app", "pip.*install.*fail", "django.*error", "flask.*error", "python.*crash"],
+        "Application build failure": ["build.*fail", "compile.*error", "webpack.*error", "vite.*error", "build.*error"],
+        "SSL/TLS certificate issue": ["ssl.*error", "certificate.*expir", "tls.*handshake", "cert.*invalid"],
+        "API service failure": ["api.*down", "api.*error", "api.*fail", "endpoint.*fail", "service.*unavailable"],
     }
 
     for cause, keywords in patterns.items():

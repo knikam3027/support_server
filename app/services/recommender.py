@@ -64,6 +64,47 @@ RUNBOOK_MAP = {
         "Rotate credentials if compromised",
         "Check IAM/RBAC permissions",
     ],
+    "react": [
+        "Set up React project using Create React App or Vite",
+        "Install required dependencies (npm install)",
+        "Configure environment variables for the target account",
+        "Set up project structure with components, pages, and services",
+        "Configure build and deployment pipeline",
+    ],
+    "node": [
+        "Check Node.js version compatibility (node -v)",
+        "Clear npm cache and reinstall dependencies (npm ci)",
+        "Check for conflicting or outdated packages",
+        "Review application logs for startup errors",
+        "Verify environment variables are correctly set",
+    ],
+    "python": [
+        "Check Python version compatibility",
+        "Recreate virtual environment and reinstall dependencies",
+        "Check for missing or conflicting packages",
+        "Review application logs for errors",
+        "Verify environment configuration",
+    ],
+    "build": [
+        "Check build logs for specific error messages",
+        "Clear build cache and rebuild",
+        "Verify all dependencies are installed correctly",
+        "Check for syntax errors or breaking changes",
+        "Review recent code changes that may have caused the failure",
+    ],
+    "ssl": [
+        "Check certificate expiry dates",
+        "Renew or regenerate SSL/TLS certificates",
+        "Verify certificate chain is complete",
+        "Update certificate in load balancer/ingress config",
+    ],
+    "api": [
+        "Check API service health and logs",
+        "Verify service endpoint connectivity",
+        "Check rate limits and quotas",
+        "Review recent API changes or deployments",
+        "Test with curl or Postman to isolate the issue",
+    ],
 }
 
 

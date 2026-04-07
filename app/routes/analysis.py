@@ -52,6 +52,7 @@ async def analyze_incident(incident_id: str):
         root_cause_result["rootCause"],
         steps,
         incident.get("system", "Linux"),
+        ticket_text,
     )
 
     # Save results to incident
@@ -66,13 +67,17 @@ async def analyze_incident(incident_id: str):
         {"_id": ObjectId(incident_id)}, {"$set": update_data}
     )
 
-    # Save solution
+    # Save solution (replace previous if exists)
     solution_doc = {
         "incidentId": incident_id,
         "recommendedSteps": steps,
         "generatedScript": script,
     }
-    await db.solutions.insert_one(solution_doc)
+    await db.solutions.update_one(
+        {"incidentId": incident_id},
+        {"$set": solution_doc},
+        upsert=True,
+    )
 
     # Index for future similarity searches
     updated_incident = {**incident, **update_data, "_id": incident_id}
