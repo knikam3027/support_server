@@ -116,6 +116,8 @@ def _fallback_root_cause(ticket_text: str, log_errors: list[str] = None) -> dict
         "Service memory exhaustion (OOM)": ["oom", "out of memory", "memory.*exceeded", "killed.*memory"],
         "Disk space full": ["disk.*full", "no space", "disk.*exceeded"],
         "Network connectivity failure": ["connection refused", "network.*unreachable", "dns.*failed"],
+        "Docker registry pull rate limit exceeded": ["rate.?limit", "429", "too many requests", "docker.*hub.*limit", "pull.*rate", "registry.*limit", "toomanyrequests"],
+        "Docker image pull failure": ["image.*pull.*back", "imagepullbackoff", "manifest.*not.*found", "docker.*pull.*fail"],
         "Application deployment failure": ["deploy.*fail", "rollout.*fail", "image.*pull", "crashloopbackoff"],
         "Authentication/Authorization failure": ["auth.*fail", "401", "403", "token.*expired", "permission denied"],
         "High CPU utilization": ["high cpu", "cpu.*100", "cpu.*spike"],

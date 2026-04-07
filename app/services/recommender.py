@@ -20,6 +20,20 @@ RUNBOOK_MAP = {
         "Increase memory limits in deployment spec",
         "Check for memory leak patterns in logs",
     ],
+    "rate limit": [
+        "Authenticate Docker CLI with Docker Hub credentials (docker login)",
+        "Configure a private registry mirror or proxy cache (e.g. Harbor, Nexus, registry:2)",
+        "Switch CI/CD image references to a private/mirrored registry",
+        "Upgrade Docker Hub plan to increase pull rate limits",
+        "Add imagePullSecrets to Kubernetes pods/service accounts",
+    ],
+    "docker": [
+        "Authenticate Docker CLI with Docker Hub credentials (docker login)",
+        "Set up a local Docker registry mirror to cache images",
+        "Verify image tags and digests exist in the registry",
+        "Check Docker daemon logs for pull errors (journalctl -u docker)",
+        "Review CI/CD pipeline for excessive parallel image pulls",
+    ],
     "deployment": [
         "Check recent deployments and changes",
         "Roll back to previous stable release",

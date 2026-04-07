@@ -46,6 +46,35 @@ def _fallback_script(root_cause: str, system: str) -> str:
     """Generate a basic script without LLM."""
     root_lower = root_cause.lower()
 
+    if "rate limit" in root_lower or "429" in root_lower or "too many requests" in root_lower or ("docker" in root_lower and "registry" in root_lower):
+        return '''#!/bin/bash
+# Remediation: Docker Hub pull rate limit exceeded
+
+# Step 1: Authenticate with Docker Hub to increase rate limit
+echo "Logging in to Docker Hub..."
+docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"
+
+# Step 2: Check current rate limit status
+echo "Checking Docker Hub rate limit..."
+TOKEN=$(curl -s "https://auth.docker.io/token?service=registry.docker.io&scope=repository:ratelimitpreview/test:pull" | jq -r .token)
+curl -s -H "Authorization: Bearer $TOKEN" "https://registry-1.docker.io/v2/ratelimitpreview/test/manifests/latest" -D - -o /dev/null 2>&1 | grep ratelimit
+
+# Step 3: Set up a local registry mirror (run once)
+echo "Starting local Docker registry mirror..."
+docker run -d --name registry-mirror -p 5000:5000 --restart=always \\
+  -e REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io \\
+  registry:2
+
+# Step 4: Update Docker daemon to use mirror
+echo "Add to /etc/docker/daemon.json:"
+cat <<EOF
+{"registry-mirrors": ["http://localhost:5000"]}
+EOF
+echo "Then restart Docker: sudo systemctl restart docker"
+
+echo "Done. Re-run CI/CD pipeline after applying changes."
+'''
+
     if "database" in root_lower or "connection pool" in root_lower:
         return """#!/bin/bash
 # Remediation: Database connection pool issues
